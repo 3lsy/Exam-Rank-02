@@ -1,39 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define ABS(X) (((X) < 0) ? (-X) : (X))
 
-char *ft_itoa(int nbr) 
+static int	ft_intlen(long nb)
 {
-	if(nbr == -2147483648)
-		return("-2147483648\0");
-	int n = nbr;
-	int len = 0;
-	if (nbr <= 0)
+	int	i = 0;
+	while (nb != 0)
 	{
-		len++;
-    	}
-	while (n) 
-	{
-		n /= 10;
-		len++;
+		nb /= 10;
+		i++;
 	}
-	char *result = (char *)malloc(sizeof(char) * (len + 1));
-	if (result == NULL) 
-		return NULL;
-	result[len] = '\0';
-	if (nbr == 0)
+	return (i);
+}
+
+char	*ft_itoa(int nbr)
+{
+	long 	nb = nbr;
+	int		len = ft_intlen(nb);
+	int		sign = 0;
+	if (nb < 0)
+		sign = 1;
+	char	*str = (char *)malloc(sizeof(char) * (len + sign + 1));
+	int i = len + sign;
+	while (i > 0)
 	{
-		result[0] = '0';
-		return(result);
+		str[--i] = (char)(ABS(nb % 10) + '0');
+		nb /= 10;
 	}
-	if (nbr < 0) 
-	{
-		result[0] = '-';
-		nbr = -nbr;
-	}
-	while (nbr) 
-	{
-		result[--len] = nbr % 10 + '0';
-		nbr /= 10;
-	}
-	return result;
+	if (sign)
+		str[0] = '-';
+	str[len + sign] = 0;
+	return (str);
 }

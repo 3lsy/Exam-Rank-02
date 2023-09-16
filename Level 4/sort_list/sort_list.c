@@ -3,15 +3,12 @@
 
 t_list	*sort_list(t_list *lst, int (*cmp)(int, int))
 {
-	int	swap;
-	t_list	*tmp;
-
-	tmp = lst;
+	t_list	*tmp = lst;
 	while(lst->next != NULL)
 	{
 		if (((*cmp)(lst->data, lst->next->data)) == 0)
 		{
-			swap = lst->data;
+			int swap = lst->data;
 			lst->data = lst->next->data;
 			lst->next->data = swap;
 			lst = tmp;

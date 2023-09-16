@@ -1,35 +1,57 @@
-#include <unistd.h>
 
-int main(int argc, char **argv)
+#include <unistd.h>
+#include <stdlib.h>
+
+void	ft_putchar(char c)
 {
-	int start;
-	int end;
-	int i = 0;
-		
-	if(argc == 2)
-	{   
-		while(argv[1][i] != '\0')
-			i++;
-		while(i >= 0)
+	write(1, &c, 1);
+}
+
+
+static int	word_size(char *str, int i)
+{
+	while (str[i] && (str[i] != ' ' && str[i] != '\t'))
+		i++;
+	return (i);
+}
+
+static int	put_word(char *str, int i)
+{
+	while (str[i] && (str[i] != ' ' && str[i] != '\t'))
+		ft_putchar(str[i++]);
+	return (i);
+}
+
+static int	skip_spaces(char *str, int i)
+{
+	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
+		i++;
+	return (i);
+}
+
+void	rev_wstr(char *str, int i)
+{
+	int	sp;
+
+	if (str[i])
+	{
+		sp = 0;
+		if (str[i] == ' ' || str[i] == '\t')
 		{
-			while( argv[1][i] == '\0' || argv[1][i] == ' ' || argv[1][i] == '\t')
-				i--;
-			end = i;
-			while(argv[1][i] && argv[1][i] != ' ' && argv[1][i] != '\t')
-				i--;
-			start = i + 1;
-			int  flag;
-			flag = start;
-			while(start <= end)
-			{
-				write (1, &argv[1][start],1);
-				start++;		
-			}
-			if (flag !=0)
-			{
-				write(1, " ", 1);
-			}
+			i = skip_spaces(str, i);
+			sp = 1;
 		}
+		rev_wstr(str, word_size(str, i));
+		put_word(str, i);
+		if (sp)
+			ft_putchar(' ');
 	}
+}
+
+int	main(int ac, char **av)
+{
+	if (ac == 2)
+		rev_wstr(av[1], 0);
 	write(1, "\n", 1);
+	return (0);
 }

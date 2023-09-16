@@ -1,46 +1,31 @@
 #include <stdlib.h>
-#include <stdio.h>
+#define IS_SPACE(x) (x == ' ' || x == '\t' || x == '\n')
 
-char *ft_strncpy(char *s1, char *s2, int n)
+int	skip_separation(char *str, int i)
 {
-	int i = -1;
-
-	while (++i < n && s2[i])
-		s1[i] = s2[i];
-	s1[i] = '\0';
-	return (s1);
+	while (str[i] && IS_SPACE(str[i]))
+		i++;
+	return (i);
 }
 
 char	**ft_split(char *str)
 {
-	int i = 0;
-	int j = 0;
-	int k = 0;
-	int wc = 0;
+	char	**spl = malloc(sizeof(char *) * 100000);
+	int		i = 0;
+	int		x = 0;
 	while (str[i])
 	{
-		while (str[i] && (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'))
-			i++;
-		if (str[i])
-			wc++;
-		while (str[i] && (str[i] != ' ' && str[i] != '\t' && str[i] != '\n'))
-			i++;
-	}
-	char **out = (char **)malloc(sizeof(char *) * (wc + 1));
-	i = 0;
-	while (str[i])
-	{
-		while (str[i] && (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'))
-			i++;
-		j = i;
-		while (str[i] && (str[i] != ' ' && str[i] != '\t' && str[i] != '\n'))
-			i++;
-		if (i > j)
+		if (!IS_SPACE(str[i]))
 		{
-			out[k] = (char *)malloc(sizeof(char) * ((i - j) + 1));
-			ft_strncpy(out[k++], &str[j], i - j);
+			spl[x] = malloc(sizeof(char) * 100000);
+			int i_word = 0;
+			while (str[i] && !IS_SPACE(str[i]))
+				spl[x][i_word++] = str[i++];
+			spl[x++][i_word] = 0;
 		}
+		else
+			i = skip_separation(str, i);
 	}
-	out[k] = NULL;
-	return (out);
+	spl[x] = NULL;
+	return (spl);
 }
